@@ -1,31 +1,29 @@
-class Solution {
-    public List<List<Integer>> threeSum(int[] nums) {
-        if (nums.length<3 ){
-            return new ArrayList<>();
-        }
-        Set<List<Integer>> result=new HashSet<>();
-        Arrays.sort(nums);
-        for (int i=0;i<nums.length-2;i++){
-            int left=i+1;
-            int right=nums.length-1;
-            while (left<right){
-                int sum=nums[left]+nums[right]+nums[i];
-                
-                if (sum==0){
-                    result.add(Arrays.asList(nums[i],nums[left],nums[right]));
-                    left++;
-                    right--;
-                }
-                else if (sum>0){
-                    right--;
-                }
-                else{
-                    left++;
-                }
-            }
-            
-        }
-        return new ArrayList<>(result);
-        
-    }
-}
+class Solution{
+public List<List<Integer>> threeSum(int[] A) {
+	List<List<Integer>>res = new ArrayList<List<Integer>>();
+	if (A == null || A.length == 0)
+		return res;
+	Arrays.sort(A);
+	for (int i = 0; i < A.length; i++) {
+		if (i - 1 >= 0 && A[i] == A[i - 1]) continue; 
+		  
+		int left = i + 1, right = A.length - 1; 
+		while (left < right) {// Two Pointers
+			int sum = A[i] + A[left] + A[right];
+			if (sum == 0) { 
+				res.add(Arrays.asList(A[i], A[left], A[right]));
+				while (left + 1 < right && A[left] == A[left+1])
+					left++;
+				while (right -1 > left && A[right] == A[right-1])
+					right--;
+                 left++; 
+				right--;
+			} else if (sum < 0) { 
+				left++;
+			} else {
+				right--;
+			}
+		}
+	}
+	return res;
+}}
