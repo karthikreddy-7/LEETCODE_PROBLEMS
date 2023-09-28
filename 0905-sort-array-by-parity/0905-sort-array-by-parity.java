@@ -1,18 +1,27 @@
-public class Solution {
+class Solution {
     public int[] sortArrayByParity(int[] nums) {
-        int i = 0, j = nums.length - 1;
+        List<Integer> evenNumbers = new ArrayList<>();
+        List<Integer> oddNumbers = new ArrayList<>();
         
-        while (i < j) {
-            while (i < j && nums[i] % 2 == 0)
-                i++;
-            while (i < j && nums[j] % 2 == 1)
-                j--;
-            
-            int temp = nums[i];
-            nums[i] = nums[j];
-            nums[j] = temp;
+        // Separate even and odd numbers
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] % 2 == 0)
+                evenNumbers.add(nums[i]);  // Even number found
+            else
+                oddNumbers.add(nums[i]);   // Odd number found
         }
         
-        return nums;
+        // Combine even and odd numbers, placing even numbers first
+        for (int num : oddNumbers) {
+            evenNumbers.add(num);
+        }
+        
+        // Convert List to int[]
+        int[] result = new int[evenNumbers.size()];
+        for (int i = 0; i < evenNumbers.size(); i++) {
+            result[i] = evenNumbers.get(i);
+        }
+        
+        return result;  // Return the sorted array
     }
 }
