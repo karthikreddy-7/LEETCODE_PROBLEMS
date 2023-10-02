@@ -1,24 +1,22 @@
 public class Solution {
     public boolean winnerOfGame(String colors) {
-        int aliceScore = 0;
-        int bobScore = 0;
-
-        // Iterate through the colors, excluding the edge pieces
-        for (int i = 1; i < colors.length() - 1; i++) {
-            char currentColor = colors.charAt(i);
-            char prevColor = colors.charAt(i - 1);
-            char nextColor = colors.charAt(i + 1);
-
-            // Check if Alice can make a move here
-            if (currentColor == 'A' && prevColor == 'A' && nextColor == 'A')
-                aliceScore++; // Alice can remove 'A'
-
-            // Check if Bob can make a move here
-            else if (currentColor == 'B' && prevColor == 'B' && nextColor == 'B')
-                bobScore++; // Bob can remove 'B'
+        Map<Character, Integer> c = new HashMap<>();
+        c.put('A', 0);
+        c.put('B', 0);
+        
+        for (int i = 0; i < colors.length(); i++) {
+            char x = colors.charAt(i);
+            int count = 0;
+            
+            while (i < colors.length() && colors.charAt(i) == x) {
+                i++;
+                count++;
+            }
+            
+            c.put(x, c.get(x) + Math.max(count - 2, 0));
+            i--;
         }
 
-        // Determine the winner based on the scores
-        return aliceScore > bobScore;
+        return c.get('A') > c.get('B');
     }
 }
