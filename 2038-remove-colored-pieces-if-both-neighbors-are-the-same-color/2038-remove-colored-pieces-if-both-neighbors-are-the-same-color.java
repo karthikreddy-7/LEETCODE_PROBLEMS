@@ -1,22 +1,26 @@
 public class Solution {
     public boolean winnerOfGame(String colors) {
-        Map<Character, Integer> c = new HashMap<>();
-        c.put('A', 0);
-        c.put('B', 0);
+        int alice_plays = 0, bob_plays = 0, count = 0;
         
-        for (int i = 0; i < colors.length(); i++) {
-            char x = colors.charAt(i);
-            int count = 0;
-            
-            while (i < colors.length() && colors.charAt(i) == x) {
-                i++;
+        for (int i = 1; i < colors.length(); i++) {
+            if (colors.charAt(i) == colors.charAt(i - 1)) {
                 count++;
+            } else {
+                if (colors.charAt(i - 1) == 'A') {
+                    alice_plays += Math.max(0, count - 1);
+                } else {
+                    bob_plays += Math.max(0, count - 1);
+                }
+                count = 0;
             }
-            
-            c.put(x, c.get(x) + Math.max(count - 2, 0));
-            i--;
         }
 
-        return c.get('A') > c.get('B');
+        if (colors.charAt(colors.length() - 1) == 'A') {
+            alice_plays += Math.max(0, count - 1);
+        } else {
+            bob_plays += Math.max(0, count - 1);
+        }
+        
+        return alice_plays > bob_plays;
     }
 }
