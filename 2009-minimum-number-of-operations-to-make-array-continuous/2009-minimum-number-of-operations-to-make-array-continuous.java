@@ -1,23 +1,21 @@
 class Solution {
     public int minOperations(int[] nums) {
-        int length = nums.length;
-        int minOperations = length;
-        Set<Integer> uniqueNums = new HashSet<>();
-        for (int num : nums) {
-            uniqueNums.add(num);
-        }
-        Integer[] sortedUniqueNums = uniqueNums.toArray(new Integer[uniqueNums.size()]);
-        Arrays.sort(sortedUniqueNums);
-        int right = 0;
-
-        for (int left = 0; left < sortedUniqueNums.length; left++) {
-            while (right < sortedUniqueNums.length && sortedUniqueNums[right] < sortedUniqueNums[left] + length) {
-                right++;
+        Arrays.sort(nums);
+        int uniqueLen = 1;
+        for (int i = 1; i < nums.length; ++i) {
+            if (nums[i] != nums[i - 1]) {
+                nums[uniqueLen++] = nums[i];
             }
-
-            minOperations = Math.min(minOperations, length - (right - left));
         }
-
-        return minOperations;        
+        
+        int ans = nums.length;
+        for (int i = 0, j = 0; i < uniqueLen; ++i) {
+            while (j < uniqueLen && nums[j] - nums[i] <= nums.length - 1) {
+                ++j;
+            }
+            ans = Math.min(ans, nums.length - (j - i));
+        }
+        
+        return ans;
     }
 }
