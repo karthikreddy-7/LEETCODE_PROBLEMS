@@ -1,19 +1,21 @@
 class Solution {
     public int paintWalls(int[] cost, int[] time) {
-        int n=cost.length;
-        return (int)paintWallsHelper(cost,time,0,0,new Long[n][501]);
-    }
-    
-    private long paintWallsHelper(int[] cost, int[] time, int index, int total, Long[][] memo) {
-        if(total >= cost.length)
-            return 0;
-        if(index >= cost.length)
-            return Integer.MAX_VALUE;
-        if(memo[index][total] != null)
-            return memo[index][total];
+        int n = cost.length;
+        int[][] dp = new int[n + 1][n + 1];
         
-        long with=cost[index] + paintWallsHelper(cost,time,index+1,total+time[index]+1,memo);
-        long without=paintWallsHelper(cost,time,index+1,total,memo);
-        return memo[index][total]=Math.min(with,without);
+        for (int i = 1; i <= n; i++) {
+            dp[n][i] = (int) 1e9;
+        }
+        int opt1;
+        int opt2;
+        for (int i = n - 1; i >= 0; i--) {
+            for (int remain = 1; remain <= n; remain++) {
+                opt1 = cost[i] + dp[i + 1][Math.max(0, remain - 1 - time[i])];
+                opt2 = dp[i + 1][remain];
+                dp[i][remain] = Math.min(opt1, opt2);
+            }
+        }
+        
+        return dp[0][n];
     }
 }
