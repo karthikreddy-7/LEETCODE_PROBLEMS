@@ -1,41 +1,26 @@
 class Solution {
-    
-    // Breadth-First Search to check if the given nodes form a valid binary tree
-    private boolean isBinaryTreeValid(int root, int[] leftChild, int[] rightChild) {
-        boolean[] visited = new boolean[leftChild.length]; // Tracks visited nodes
-        Queue<Integer> nodeQueue = new LinkedList<>(); // Queue for BFS traversal
-        nodeQueue.offer(root);
-        visited[root] = true;
+    // Depth-First Search to check if the given nodes form a valid binary tree
+    private boolean isBinaryTreeValid(int current, int[] leftChild, int[] rightChild, boolean[] visited) {
+        // Check left child
+        if (leftChild[current] != -1) {
+            if (visited[leftChild[current]]) // Check for cycle
+                return false;
 
-        while (!nodeQueue.isEmpty()) {
-            int current = nodeQueue.poll();
-
-            // Check left child
-            if (leftChild[current] != -1) {
-                if (visited[leftChild[current]]) // Check for cycle
-                    return false;
-
-                nodeQueue.offer(leftChild[current]);
-                visited[leftChild[current]] = true; // Mark left child as visited
-            }
-
-            // Check right child
-            if (rightChild[current] != -1) {
-                if (visited[rightChild[current]]) // Check for cycle
-                    return false;
-
-                nodeQueue.offer(rightChild[current]);
-                visited[rightChild[current]] = true; // Mark right child as visited
-            }
-        }
-
-        // Check if there are multiple components
-        for (boolean visit : visited) {
-            if (!visit)
+            visited[leftChild[current]] = true; // Mark left child as visited
+            if (!isBinaryTreeValid(leftChild[current], leftChild, rightChild, visited))
                 return false;
         }
 
-        return true; // All nodes form a valid binary tree
+        // Check right child
+        if (rightChild[current] != -1) {
+            if (visited[rightChild[current]]) // Check for cycle
+                return false;
+
+            visited[rightChild[current]] = true; // Mark right child as visited
+            if (!isBinaryTreeValid(rightChild[current], leftChild, rightChild, visited))
+                return false;
+        }
+        return true;
     }
 
     public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
@@ -72,7 +57,16 @@ class Solution {
         if (root == -1)
             return false; // No root found, not a valid binary tree
 
-        return isBinaryTreeValid(root, leftChild, rightChild); // Check if the tree is valid
-    }
+        boolean[] visited = new boolean[n]; // Tracks visited nodes
+        visited[root] = true;
+        if (!isBinaryTreeValid(root, leftChild, rightChild, visited)) // Check if the tree is valid
+            return false;
 
+        // Check if there is multiple components
+        for (boolean visit : visited)
+            if (!visit)
+                return false;
+
+        return true; // All nodes form a valid binary tree
+    }
 }
