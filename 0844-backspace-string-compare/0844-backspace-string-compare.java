@@ -1,28 +1,21 @@
 class Solution {
-    public boolean backspaceCompare(String s, String t) {
-        String s1 = "";
-        String t1 = "";
-
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '#') {
-                if (!s1.isEmpty()) {
-                    s1 = s1.substring(0, s1.length() - 1);
-                }
-            } else {
-                s1 = s1 + s.charAt(i);
-            }
-        }
-
-        for (int i = 0; i < t.length(); i++) {
-            if (t.charAt(i) == '#') {
-                if (!t1.isEmpty()) {
-                    t1 = t1.substring(0, t1.length() - 1);
-                }
-            } else {
-                t1 = t1 + t.charAt(i);
-            }
-        }
-
-        return s1.equals(t1);
+private static int nextChar(String str, int cur){
+    while(cur > -1 && str.charAt(cur) == '#'){
+        int cnt = 1;
+        for(cur--; cur > -1 && cnt > 0; cur--)
+            cnt += str.charAt(cur) == '#'? 1 : -1;
     }
+    return cur;
+}
+public boolean backspaceCompare(String s, String t) {
+    int i = nextChar(s, s.length() - 1);
+    int j = nextChar(t, t.length() - 1);
+    while(i > -1 && j > -1){
+        if(s.charAt(i) != t.charAt(j)) return false;
+        i = nextChar(s, i - 1);
+        j = nextChar(t, j - 1);
+    }
+    if(i == -1 && j == -1) return true;
+    return false;
+}
 }
