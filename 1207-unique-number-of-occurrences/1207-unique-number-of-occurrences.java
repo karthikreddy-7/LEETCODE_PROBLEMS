@@ -1,24 +1,20 @@
-import java.util.*;
-
 class Solution {
     public boolean uniqueOccurrences(int[] arr) {
-        HashMap<Integer, Integer> h = new HashMap<>();
-        
-        // Count the occurrences of each number
-        for (int num : arr) {
-            h.put(num, h.getOrDefault(num, 0) + 1);
+        Map<Integer, Integer> frequencyMap = new HashMap<>();
+
+        // Count the frequency of each element
+        for (int i : arr) {
+            frequencyMap.put(i, frequencyMap.getOrDefault(i, 0) + 1);
         }
-        
-        HashSet<Integer> occurrenceSet = new HashSet<>();
-        
-        // Check if the occurrences are unique
-        for (int count : h.values()) {
-            if (occurrenceSet.contains(count)) {
-                return false; // If not unique, return false
+
+        // Check for repeated values in the frequencies
+        HashSet<Integer> seenFrequencies = new HashSet<>();
+        for (int frequency : frequencyMap.values()) {
+            if (!seenFrequencies.add(frequency)) {
+                return false;  // Repeated frequency found
             }
-            occurrenceSet.add(count);
         }
-        
-        return true; // All occurrences are unique
+
+        return true;  // All frequencies are unique
     }
 }
